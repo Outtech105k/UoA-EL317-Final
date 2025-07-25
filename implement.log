@@ -1,0 +1,43 @@
+## Implementation Log
+
+### 1. Project Initialization and Dependency Installation
+- Executed `npm init -y` to generate `package.json`.
+- Executed `npm install compromise` to install the `compromise` library.
+
+### 2. Basic Program Structure Creation
+- Created `index.js` file.
+- Imported `fs`, `path`, `compromise`.
+- Created `texts` folder for storing text files.
+- Created test text files (`text1.txt`, `text2.txt`, `text3.txt`) in the `texts` folder.
+- Added code to `index.js` to read files from the `texts` folder and print their content to the console.
+- Verified file reading functionality by running `node index.js`.
+
+### 3. N-gram Extraction Implementation
+- Attempted to use `compromise`'s `ngrams` method, but encountered `TypeError: doc.ngrams is not a function`.
+- Searched `compromise` documentation and identified the need for the `compromise-stats` plugin.
+- Executed `npm install compromise-stats` to install the plugin.
+- Added `nlp.extend(require('compromise-stats'));` to `index.js` to enable the plugin.
+- Added code to extract n-grams using `ngrams({ max: 5, min: 3 })`.
+- Verified n-gram extraction functionality by running `node index.js`.
+
+### 4. Common Pattern Detection and Counting
+- Filtered out n-grams that are common to all texts.
+- Counted the occurrences of common patterns.
+- Sorted the results by length in descending order.
+- Verified common pattern detection and counting functionality by running `node index.js`.
+
+### 5. Test Data Adjustment and N-gram Max Length Change
+- To detect multiple common patterns, deleted existing test files and created new ones (`test1.txt`, `test2.txt`, `test3.txt`).
+- Adjusted the `max` parameter of the `ngrams` method to `15` to allow detection of longer phrases.
+- Verified functionality by running `node index.js`.
+
+### 6. Output Formatting
+- Formatted the output to display results as "1st longest pattern: ...", "2nd longest pattern: ...", etc.
+- Verified the final output format by running `node index.js`.
+
+### 7. POS Pattern Detection
+- Added functionality to extract and identify common Part-of-Speech (POS) patterns.
+- Implemented a function to generate POS n-grams.
+- Added logic to find and count common POS patterns across all texts.
+- Formatted and displayed the POS pattern results similarly to the word n-gram results.
+- Verified the new functionality by running `node index.js`.
