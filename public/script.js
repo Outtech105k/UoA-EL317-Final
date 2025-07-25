@@ -1,5 +1,7 @@
 class PatternDetectionApp {
     constructor() {
+        this.hiddenFiles = new Set();
+        this.allFiles = [];
         this.init();
     }
 
@@ -79,60 +81,45 @@ class PatternDetectionApp {
             const data = await response.json();
             
             this.displayFileList(data.files);
-            this.updateAnalyzeButton(data.files.length > 0);
+            const visibleFiles = data.files.filter(file => !this.hiddenFiles.has(file));
+            this.updateAnalyzeButton(visibleFiles.length > 0);
         } catch (error) {
             console.error('Failed to load file list:', error);
         }
     }
 
     displayFileList(files) {
+        this.allFiles = files;
+        const visibleFiles = files.filter(file => !this.hiddenFiles.has(file));
         const fileList = document.getElementById('fileList');
         
-        if (files.length === 0) {
+        if (visibleFiles.length === 0) {
             fileList.innerHTML = '<p style="color: #6c757d; text-align: center;">No files uploaded</p>';
             return;
         }
 
-        fileList.innerHTML = files.map(file => `
+        fileList.innerHTML = visibleFiles.map(file => `
             <div class="file-item">
                 <span class="file-name">${file}</span>
-                <button class="delete-btn" onclick="app.deleteFile('${file}')">Delete</button>
+                <button class="delete-btn" onclick="app.hideFile('${file}')">Delete</button>
             </div>
         `).join('');
     }
 
-    async deleteFile(filename) {
-        try {
-            const response = await fetch(`/files/${filename}`, {
-                method: 'DELETE'
-            });
-
-            if (response.ok) {
-                this.loadExistingFiles();
-                this.showMessage('File deleted successfully', 'success');
-            } else {
-                throw new Error('Delete failed');
-            }
-        } catch (error) {
-            this.showError('File deletion failed: ' + error.message);
-        }
+    hideFile(filename) {
+        this.hiddenFiles.add(filename);
+        this.displayFileList(this.allFiles);
+        const visibleFiles = this.allFiles.filter(file => !this.hiddenFiles.has(file));
+        this.updateAnalyzeButton(visibleFiles.length > 0);
+        this.showMessage('File hidden from view', 'success');
     }
 
-    async clearFiles() {
-        try {
-            const response = await fetch('/files');
-            const data = await response.json();
-            
-            for (const file of data.files) {
-                await fetch(`/files/${file}`, { method: 'DELETE' });
-            }
-            
-            this.loadExistingFiles();
-            this.hideResults();
-            this.showMessage('All files cleared successfully', 'success');
-        } catch (error) {
-            this.showError('Failed to clear files: ' + error.message);
-        }
+    clearFiles() {
+        this.allFiles.forEach(file => this.hiddenFiles.add(file));
+        this.displayFileList(this.allFiles);
+        this.updateAnalyzeButton(false);
+        this.hideResults();
+        this.showMessage('All files cleared from view', 'success');
     }
 
     updateAnalyzeButton(hasFiles) {
@@ -188,7 +175,9 @@ class PatternDetectionApp {
                 return `
                     <div class="pattern-item">
                         <div class="pattern-rank">${rank} longest POS pattern</div>
-                        <div class="pattern-text">"${item.pattern}"</div>
+                        <div class="pattern-examples">
+                            ${this.formatPosWithText(item.pattern, item.examples[0])}
+                        </div>
                         <div class="pattern-count">Occurrences: ${item.count} | Length: ${item.length} tags</div>
                     </div>
                 `;
@@ -196,6 +185,40 @@ class PatternDetectionApp {
         }
 
         resultsSection.style.display = 'block';
+    }
+
+    colorizePattern(pattern) {
+        return pattern.split(' ').map(tag => {
+            return `<span class="pos-tag pos-${tag}">${tag}</span>`;
+        }).join(' ');
+    }
+
+    formatPosWithText(posPattern, textExample) {
+        if (!textExample) return '';
+        
+        const posTags = posPattern.split(' ');
+        const words = textExample.split(' ');
+        
+        // Ensure we have matching lengths
+        const minLength = Math.min(posTags.length, words.length);
+        
+        const wordContainers = [];
+        for (let i = 0; i < minLength; i++) {
+            // Handle special characters in POS tags for CSS class names
+            const cleanTag = posTags[i].replace(/\$/g, 'S').replace(/[^a-zA-Z0-9]/g, '');
+            wordContainers.push(`
+                <div class="word-container">
+                    <span class="pos-tag pos-${cleanTag}">${posTags[i]}</span>
+                    <span class="word-text">${words[i]}</span>
+                </div>
+            `);
+        }
+        
+        return `
+            <div class="pos-text-alignment">
+                ${wordContainers.join('')}
+            </div>
+        `;
     }
 
     getRankString(num) {

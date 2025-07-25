@@ -297,6 +297,169 @@ main {
     margin-bottom: 10px;
 }
 
+/* POS Tag Colors */
+.pos-tag {
+    display: inline-block;
+    padding: 2px 6px;
+    margin: 1px;
+    border-radius: 4px;
+    font-size: 0.85em;
+    font-weight: 500;
+    color: white;
+    text-shadow: 1px 1px 1px rgba(0,0,0,0.3);
+    background-color: #bdc3c7;
+}
+
+/* Noun tags */
+.pos-NN { background-color: #3498db !important; }
+.pos-NNS { background-color: #3498db !important; }
+.pos-NNP { background-color: #3498db !important; }
+.pos-NNPS { background-color: #3498db !important; }
+
+/* Verb tags */
+.pos-VB { background-color: #e74c3c !important; }
+.pos-VBD { background-color: #e74c3c !important; }
+.pos-VBG { background-color: #e74c3c !important; }
+.pos-VBN { background-color: #e74c3c !important; }
+.pos-VBP { background-color: #e74c3c !important; }
+.pos-VBZ { background-color: #e74c3c !important; }
+
+/* Adjective tags */
+.pos-JJ { background-color: #f39c12 !important; }
+.pos-JJR { background-color: #f39c12 !important; }
+.pos-JJS { background-color: #f39c12 !important; }
+
+/* Adverb tags */
+.pos-RB { background-color: #9b59b6 !important; }
+.pos-RBR { background-color: #9b59b6 !important; }
+.pos-RBS { background-color: #9b59b6 !important; }
+
+/* Determiner tags */
+.pos-DT { background-color: #1abc9c !important; }
+
+/* Preposition tags */
+.pos-IN { background-color: #34495e !important; }
+.pos-TO { background-color: #34495e !important; }
+
+/* Pronoun tags */
+.pos-PRP { background-color: #e67e22 !important; }
+.pos-PRPS { background-color: #e67e22 !important; }
+
+/* Conjunction tags */
+.pos-CC { background-color: #95a5a6 !important; }
+
+/* Interjection tags */
+.pos-UH { background-color: #8e44ad !important; }
+
+/* Modal tags */
+.pos-MD { background-color: #2c3e50 !important; }
+
+/* Particle tags */
+.pos-RP { background-color: #16a085 !important; }
+
+/* Wh- words */
+.pos-WDT { background-color: #d35400 !important; }
+.pos-WP { background-color: #d35400 !important; }
+.pos-WPS { background-color: #d35400 !important; }
+.pos-WRB { background-color: #d35400 !important; }
+
+/* Existential there */
+.pos-EX { background-color: #7f8c8d !important; }
+
+/* Foreign words */
+.pos-FW { background-color: #c0392b !important; }
+
+/* List item marker */
+.pos-LS { background-color: #27ae60 !important; }
+
+/* Predeterminer */
+.pos-PDT { background-color: #f1c40f !important; color: #2c3e50 !important; }
+
+/* Possessive ending */
+.pos-POS { background-color: #e91e63 !important; }
+
+/* Symbol */
+.pos-SYM { background-color: #607d8b !important; }
+
+/* Compromise library full name tags */
+.pos-Determiner { background-color: #1abc9c !important; }
+.pos-Adjective { background-color: #f39c12 !important; }
+.pos-Noun { background-color: #3498db !important; }
+.pos-Verb { background-color: #e74c3c !important; }
+.pos-Adverb { background-color: #9b59b6 !important; }
+.pos-Preposition { background-color: #34495e !important; }
+.pos-Pronoun { background-color: #e67e22 !important; }
+.pos-Conjunction { background-color: #95a5a6 !important; }
+.pos-Modal { background-color: #2c3e50 !important; }
+.pos-Article { background-color: #1abc9c !important; }
+.pos-Possessive { background-color: #e67e22 !important; }
+.pos-Interjection { background-color: #8e44ad !important; }
+.pos-Particle { background-color: #16a085 !important; }
+.pos-Symbol { background-color: #607d8b !important; }
+.pos-Foreign { background-color: #c0392b !important; }
+.pos-Number { background-color: #27ae60 !important; }
+
+.pos-pattern-display {
+    line-height: 2;
+}
+
+.pattern-examples {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 5px;
+    margin: 10px 0;
+    border-left: 3px solid #17a2b8;
+    color: #495057;
+}
+
+.pos-text-alignment {
+    font-family: 'Courier New', Monaco, monospace;
+    line-height: 2.5;
+    margin: 10px 0;
+}
+
+.pos-line {
+    display: flex;
+    margin-bottom: 15px;
+    align-items: flex-start;
+}
+
+.pos-tags-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-bottom: 8px;
+    min-height: 30px;
+}
+
+.text-words-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.word-container {
+    display: inline-block;
+    text-align: center;
+    vertical-align: top;
+    margin: 0 2px;
+}
+
+.word-pos-tag {
+    display: block;
+    margin-bottom: 4px;
+}
+
+.word-text {
+    display: block;
+    font-weight: 500;
+    color: #2c3e50;
+    white-space: nowrap;
+    font-size: 0.9em;
+}
+
 @media (max-width: 768px) {
     .container {
         padding: 10px;
@@ -318,5 +481,10 @@ main {
     .analyze-btn, .clear-btn {
         width: 100%;
         max-width: 300px;
+    }
+    
+    .pos-tag {
+        font-size: 0.75em;
+        padding: 1px 4px;
     }
 }
