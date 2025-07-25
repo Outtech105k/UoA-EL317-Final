@@ -112,4 +112,5 @@ The web server provides the following REST API endpoints:
 - [CORS](https://www.npmjs.com/package/cors) (Cross-origin resource sharing)
 
 ## Developer
-[Your Name or GitHub Username]
+- [Outtech105k](https://github.com/Outtech105k)
+- [ressharu](https://github.com/ressharu)
