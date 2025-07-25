@@ -64,33 +64,65 @@ function analyzeTexts() {
         return terms.map(term => term.terms[0].tags[0]);
       });
 
-      function getPosNgrams(tags, min, max) {
+      const allTerms = docs.map(doc => {
+        const terms = doc.terms().json();
+        return terms.map(term => term.terms[0].text);
+      });
+
+      function getPosNgramsWithText(tags, words, min, max) {
         const ngrams = [];
         for (let n = min; n <= max; n++) {
           if (n > tags.length) {
             continue;
           }
           for (let i = 0; i <= tags.length - n; i++) {
-            ngrams.push(tags.slice(i, i + n).join(' '));
+            const posPattern = tags.slice(i, i + n).join(' ');
+            const textPattern = words.slice(i, i + n).join(' ');
+            ngrams.push({ pos: posPattern, text: textPattern });
           }
         }
         return ngrams;
       }
 
-      const allPosNgrams = allPosTags.map(tags => getPosNgrams(tags, 3, 15));
+      const allPosNgramsWithText = allPosTags.map((tags, docIndex) => 
+        getPosNgramsWithText(tags, allTerms[docIndex], 3, 15)
+      );
 
       let posPatterns = [];
-      if (allPosNgrams.length > 0 && allPosNgrams[0].length > 0) {
-        const commonPosNgrams = allPosNgrams[0].filter(ngram => {
-          return allPosNgrams.every(ngrams => ngrams.includes(ngram));
+      if (allPosNgramsWithText.length > 0 && allPosNgramsWithText[0].length > 0) {
+        const commonPosNgrams = allPosNgramsWithText[0].filter(ngram => {
+          return allPosNgramsWithText.every(ngrams => 
+            ngrams.some(n => n.pos === ngram.pos)
+          );
         });
 
-        posPatterns = commonPosNgrams.map(ngram => {
-          const count = allPosNgrams.reduce((acc, ngrams) => {
-            return acc + ngrams.filter(n => n === ngram).length;
-          }, 0);
-          return { pattern: ngram, count: count, length: ngram.split(' ').length };
+        const posPatternMap = new Map();
+        commonPosNgrams.forEach(ngram => {
+          if (!posPatternMap.has(ngram.pos)) {
+            posPatternMap.set(ngram.pos, {
+              pattern: ngram.pos,
+              examples: new Set(),
+              count: 0,
+              length: ngram.pos.split(' ').length
+            });
+          }
         });
+
+        allPosNgramsWithText.forEach(ngrams => {
+          ngrams.forEach(ngram => {
+            if (posPatternMap.has(ngram.pos)) {
+              posPatternMap.get(ngram.pos).count++;
+              posPatternMap.get(ngram.pos).examples.add(ngram.text);
+            }
+          });
+        });
+
+        posPatterns = Array.from(posPatternMap.values()).map(item => ({
+          pattern: item.pattern,
+          count: item.count,
+          length: item.length,
+          examples: Array.from(item.examples).slice(0, 3)
+        }));
 
         posPatterns.sort((a, b) => b.length - a.length);
       }
