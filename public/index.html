@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pattern Detection Tool</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Text Pattern Detection Tool</h1>
+            <p>Detect common patterns from multiple text files</p>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <h2>Upload Text Files</h2>
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <div class="upload-icon">📁</div>
+                        <p>Drag & drop files or click to select</p>
+                        <input type="file" id="fileInput" multiple accept=".txt" style="display: none;">
+                        <button class="upload-btn" onclick="document.getElementById('fileInput').click()">
+                            Select Files
+                        </button>
+                    </div>
+                </div>
+                <div id="fileList" class="file-list"></div>
+            </section>
+
+            <section class="controls-section">
+                <button id="analyzeBtn" class="analyze-btn" disabled>Analyze Patterns</button>
+                <button id="clearBtn" class="clear-btn">Clear Files</button>
+            </section>
+
+            <section class="results-section" id="resultsSection" style="display: none;">
+                <h2>Analysis Results</h2>
+                
+                <div class="results-info">
+                    <p id="filesCount"></p>
+                </div>
+
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="patterns">Text Patterns</button>
+                    <button class="tab-btn" data-tab="pos">POS Patterns</button>
+                </div>
+
+                <div class="tab-content active" id="patterns">
+                    <h3>Common Text Patterns</h3>
+                    <div id="patternResults" class="pattern-results"></div>
+                </div>
+
+                <div class="tab-content" id="pos">
+                    <h3>Common Part-of-Speech Patterns</h3>
+                    <div id="posResults" class="pattern-results"></div>
+                </div>
+            </section>
+
+            <section class="loading-section" id="loadingSection" style="display: none;">
+                <div class="loader"></div>
+                <p>Analyzing patterns...</p>
+            </section>
+
+            <section class="error-section" id="errorSection" style="display: none;">
+                <div class="error-message">
+                    <h3>Error</h3>
+                    <p id="errorMessage"></p>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
